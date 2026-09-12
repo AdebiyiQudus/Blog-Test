@@ -184,9 +184,9 @@ function Archive({ onAddPost }) {
       </li>
     ))}
   </ul>
-)}
-</aside>
-);
+  )}
+ </aside>
+ );
 }
 
 function Footer() {
