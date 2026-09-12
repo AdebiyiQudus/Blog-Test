@@ -173,20 +173,20 @@ function Archive({ onAddPost }) {
         {showArchive ? "Hide archive posts" : "Show archive posts"}
       </button>
  
-      {showArchive && (
-        <ul>
-          {posts.map((post, i) => (
-            <li key={i}>
-              <p>
-                <strong>{post.title}:</strong> {post.body}
-              </p>
-              <button onClick={() => onAddPost(post)}>Add as new post</button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </aside>
-  );
+{showArchive && (
+  <ul>
+    {posts.map((post, i) => (
+      <li key={i}>
+        <p>
+          <strong>{post.title}:</strong> {post.body}
+        </p>
+        <button onClick={() => onAddPost(post)}>Add as new post</button>
+      </li>
+    ))}
+  </ul>
+)}
+</aside>
+);
 }
 
 function Footer() {
