@@ -54,8 +54,8 @@ function App() {
       <Header
         posts={searchedPosts}
         onClearPosts={handleClearPosts}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
+        searchQueryProp={searchQuery}
+        setSearchQueryProp={setSearchQuery}
       />
       <Main posts={searchedPosts} onAddPost={handleAddPost} />
       <Archive onAddPost={handleAddPost} />
@@ -64,7 +64,7 @@ function App() {
   );
 }
 
-function Header({ posts, onClearPosts, searchQuery, setSearchQuery }) {
+function Header({ posts, onClearPosts, searchQueryProp, setSearchQueryProp }) {
   return (
     <header>
       <h1>
@@ -73,8 +73,8 @@ function Header({ posts, onClearPosts, searchQuery, setSearchQuery }) {
       <div>
         <Results posts={posts} />
         <SearchPosts
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
+          searchQuery={searchQueryProp}
+          setSearchQuery={setSearchQueryProp}
         />
         <button onClick={onClearPosts}>Clear posts</button>
       </div>
