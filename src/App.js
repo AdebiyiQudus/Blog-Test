@@ -1,3 +1,5 @@
+// Archived posts are posts that have been moved out of the main/current list but kept somewhere else for storage or later access.
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
 
