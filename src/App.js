@@ -145,6 +145,7 @@ function FormAddPost() {
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Post title"
       />
+      
       <textarea
         value={body}
         onChange={(e) => setBody(e.target.value)}
