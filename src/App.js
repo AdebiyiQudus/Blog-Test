@@ -1,4 +1,5 @@
 // Archived posts are posts that have been moved out of the main/current list but kept somewhere else for storage or later access.
+// The Provider component is used to wrap the components that need access to the context value, and it takes a value prop that specifies the value to be provided to the child components.
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
@@ -145,7 +146,7 @@ function FormAddPost() {
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Post title"
       />
-      
+
       <textarea
         value={body}
         onChange={(e) => setBody(e.target.value)}
