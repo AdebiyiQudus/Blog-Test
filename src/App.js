@@ -1,6 +1,7 @@
 // Archived posts are posts that have been moved out of the main/current list but kept somewhere else for storage or later access.
 // The Provider component is used to wrap the components that need access to the context value, and it takes a value prop that specifies the value to be provided to the child components.
 // Value is the data that you want to share with the components that are wrapped by the Provider. In this case, we're providing the `posts`, `onAddPost`, `onClearPosts`, `searchQuery`, and `setSearchQuery` values to the child components.
+// Consumer components are the components that need access to the context value. They can use the useContext hook to consume or receive the context value provided by the Provider component.
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
