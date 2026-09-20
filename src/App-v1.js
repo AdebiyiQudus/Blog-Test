@@ -4,9 +4,8 @@
 // Value is the data that you want to share with the components that are wrapped by the Provider. In this case, we're providing the `posts`, `onAddPost`, `onClearPosts`, `searchQuery`, and `setSearchQuery` values to the child components.
 // Consumer components are the components that need access to the context value. They can use the useContext hook to consume or receive the context value provided by the Provider component.
 
-import { useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
-import { PostProvider, PostContext} from "./PostContext";
 
 function createRandomPost() {
   return {
@@ -15,20 +14,53 @@ function createRandomPost() {
   };
 }
 
+// 1) CREATE A CONTEXT
+const PostsContext = createContext();
+
 function App() {
-  // Whenever `isFakeDark` changes, we toggle the `fake-dark-mode` class on the HTML element (see in "Elements" dev tool).
+  const [posts, setPosts] = useState(() =>
+    Array.from({ length: 30 }, () => createRandomPost())
+  );
+  const [searchQuery, setSearchQuery] = useState("");
   const [isFakeDark, setIsFakeDark] = useState(false);
 
+  // Derived state. These are the posts that will actually be displayed
+  const searchedPosts =
+    searchQuery.length > 0
+      ? posts.filter((post) =>
+          `${post.title} ${post.body}`
+            .toLowerCase()
+// Check if the search query is included in the title or body of the post. if yes return true else return false
+            .includes(searchQuery.toLowerCase())
+        )
+      : posts;
+
+  function handleAddPost(post) {
+    setPosts((posts) => [post, ...posts]);
+  }
+
+  function handleClearPosts() {
+    setPosts([]);
+  }
+
+  // Whenever `isFakeDark` changes, we toggle the `fake-dark-mode` class on the HTML element (see in "Elements" dev tool).
   useEffect(
     function () {
       document.documentElement.classList.toggle("fake-dark-mode");
     },
     [isFakeDark]
   );
-  
+
   return (
- //  2) PROVIDE VALUE TO CHILD COMPONENTS 
-      <PostProvider>
+  //  2) PROVIDE VALUE TO CHILD COMPONENTS  
+    <PostsContext.Provider value={{
+       posts: searchedPosts,
+       onAddPost: handleAddPost,
+       onClearPosts: handleClearPosts,
+       searchQuery,
+      setSearchQuery,
+     }}
+     >
     <section>
       <button
         onClick={() => setIsFakeDark((isFakeDark) => !isFakeDark)}
@@ -36,22 +68,19 @@ function App() {
       >
         {isFakeDark ? "☀️" : "🌙"}
       </button>
-      
+
       <Header />
       <Main />
       <Archive />
       <Footer />
     </section>
-   </PostProvider>
+    </PostsContext.Provider>
   );
-  }
-
-
-  
+}
 
 function Header() {
   // 3) CONSUME VALUE FROM CONTEXT
-  const {onClearPosts} = useContext(PostContext);
+  const {onClearPosts} = useContext(PostsContext);
   return (
     <header>
       <h1>
@@ -67,7 +96,7 @@ function Header() {
 }
 
 function SearchPosts() {
-  const {searchQuery, setSearchQuery} = useContext(PostContext);
+  const {searchQuery, setSearchQuery} = useContext(PostsContext);
   return (
     <input
       value={searchQuery}
@@ -78,7 +107,7 @@ function SearchPosts() {
 }
 
 function Results() {
-  const {posts} = useContext(PostContext);
+  const {posts} = useContext(PostsContext);
   return <p>🚀 {posts.length} atomic posts found</p>;
 }
 
@@ -100,7 +129,7 @@ function Posts() {
 }
 
 function FormAddPost() {
-  const {onAddPost} = useContext(PostContext);
+  const {onAddPost} = useContext(PostsContext);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
@@ -132,7 +161,7 @@ function FormAddPost() {
 }
 
 function List() {
-  const {posts} = useContext(PostContext);
+  const {posts} = useContext(PostsContext);
   return (
   <ul>
   {posts.map((post, i) => (
@@ -146,7 +175,7 @@ function List() {
 }
 
 function Archive() {
-  const { onAddPost} = useContext(PostContext);
+  const { onAddPost} = useContext(PostsContext);
   // Here we don't need the setter function. We're only using state to store these posts because the callback function passed into useState (which generates the posts) is only called once, on the initial render. So we use this trick as an optimization technique, because if we just used a regular variable, these posts would be re-created on every render. We could also move the posts outside the components, but I wanted to show you this trick 😉
   const [posts] = useState(() =>
     // 💥 WARNING: This might make your computer slow! Try a smaller `length` first
